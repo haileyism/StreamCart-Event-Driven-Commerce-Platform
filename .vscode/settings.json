@@ -1,0 +1,10 @@
+{
+  "terminal.integrated.profiles.windows": {
+    "Git Bash": {
+      "path": "C:\\Users\\hailey\\AppData\\Local\\Programs\\Git\\usr\\bin\\bash.exe",
+      "args": ["--login", "-i"],
+      "icon": "terminal-bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "Git Bash"
+}
