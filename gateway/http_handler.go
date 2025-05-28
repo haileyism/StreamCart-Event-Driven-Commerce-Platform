@@ -1,15 +1,19 @@
 package main
 
-import ("net/http"
-		"log"
+import (
+	"common"
+	"log"
+	"net/http"
+
+	pb "github.com/haileyism/commons"
 )
 
 type handler struct {
-	//gateway, help service discover
+	client pb.OrderServiceClient
 }
 
-func NewHandler() *handler {
-	return &handler{}
+func NewHandler(client pb.OrderServiceClient) *handler {
+	return &handler{client}
 }
 
 func (h *handler) registerRoutes(mux *http.ServeMux) {
@@ -18,5 +22,19 @@ func (h *handler) registerRoutes(mux *http.ServeMux) {
 }
 
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
-	log.Println("hello")
+	customerID := r.PathValue("customerID")
+	
+	var items []*pb.ItemsWithQuantity
+	if err := common.ReadJSON(r,&items); err != nil{
+		common.WriteJSON(w,http.StatusBadRequest, err.Error())
+		return 
+	}
+
+
+
+	h.client.CreateOrder(r.Context(), &pb.CreateOrderRequest{
+		customerID : customerID,
+		Items: items,
+	})
+
 }
